@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Hero 6 - Words Come Alive!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Bubblegum+Sans&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Fredoka',sans-serif;background:linear-gradient(135deg,#FFF3E0 0%,#FFE0B2 50%,#B2DFDB 100%);min-height:100vh;padding:15px;color:#333}
+.container{max-width:950px;margin:0 auto}
+header{text-align:center;margin-bottom:20px;background:white;border-radius:25px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,0.08)}
+h1{font-family:'Bubblegum Sans',cursive;font-size:2.2em;color:#E65100;text-shadow:3px 3px 0 #FFD93D;line-height:1}
+.subtitle{color:#888;font-size:0.95em;margin-top:4px}
+.level-badge{display:inline-block;margin-top:10px;padding:6px 18px;background:linear-gradient(135deg,#E65100,#FF9800);border-radius:50px;font-weight:700;color:white;font-size:1em;box-shadow:0 3px 0 rgba(0,0,0,0.15)}
+.total-stars{margin-top:6px;font-size:1.1em;font-weight:600;color:#555}
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:15px}
+.unit-card{background:white;border-radius:22px;padding:18px 12px;text-align:center;cursor:pointer;transition:transform 0.15s;box-shadow:0 6px 0 rgba(0,0,0,0.08);position:relative;border:4px solid white}
+.unit-card:hover{transform:translateY(-4px)}
+.unit-card.locked{opacity:0.55;cursor:not-allowed}
+.unit-card.completed{border-color:#E65100}
+.unit-icon{display:flex;align-items:center;justify-content:center;width:80px;height:80px;margin:0 auto 6px;background:#FFFCF5;border-radius:18px;border:2px dashed #FFD93D}
+.unit-icon svg{width:60px;height:60px}
+.unit-icon svg [stroke="#888"]{stroke:#5D4037}
+.unit-num{font-size:0.75em;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.unit-name{font-size:1.05em;font-weight:700;color:#333;margin:4px 0 8px}
+.unit-stars{font-size:1.1em;color:#FFD93D;letter-spacing:2px}
+.lock-icon{position:absolute;top:10px;right:10px;font-size:1.3em;color:#888}
+.lesson-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;background:white;padding:12px 18px;border-radius:20px;box-shadow:0 4px 0 rgba(0,0,0,0.08)}
+.back-btn{background:#E65100;color:white;border:none;padding:8px 14px;border-radius:50px;font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 3px 0 #BF360C;font-size:0.95em}
+.lesson-title{font-family:'Bubblegum Sans',cursive;font-size:1.5em;color:#E65100;flex:1;display:flex;align-items:center;gap:10px}
+.lesson-title-icon{display:inline-block;width:42px;height:42px;flex-shrink:0;background:#FFFCF5;border-radius:10px;padding:4px;border:1px dashed #FFD93D}
+.lesson-title-icon svg{width:100%;height:100%}
+.lesson-title-icon svg [stroke="#888"]{stroke:#5D4037}
+.tabs{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;justify-content:center}
+.tab{padding:9px 14px;border:none;background:white;border-radius:50px;font-family:'Fredoka',sans-serif;font-size:0.9em;font-weight:600;cursor:pointer;color:#555;box-shadow:0 3px 0 rgba(0,0,0,0.1)}
+.tab.active{background:#E65100;color:white;box-shadow:0 3px 0 #BF360C}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn 0.4s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:white;border-radius:25px;padding:22px;box-shadow:0 6px 0 rgba(0,0,0,0.08)}
+.card h2{font-family:'Bubblegum Sans',cursive;color:#E65100;font-size:1.5em;margin-bottom:12px;text-align:center}
+.instruction{text-align:center;font-size:1em;color:#666;margin-bottom:18px;font-weight:500}
+.story-banner{display:flex;justify-content:center;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;background:#FFFCF5;border-radius:18px;padding:16px;border:3px dashed #FFE5B4}
+.story-banner .banner-svg{width:75px;height:75px;background:white;border-radius:14px;padding:8px;display:flex;align-items:center;justify-content:center;border:1.5px dashed #E0E0E0}
+.story-banner .banner-svg svg{width:100%;height:100%}
+.story-banner .banner-svg svg [stroke="#888"]{stroke:#5D4037}
+.story-text{font-family:'DM Serif Display',serif;font-size:1.3em;line-height:1.95;color:#333;background:#FFFCF5;padding:22px;border-radius:18px;border:3px solid #FFE5B4;margin-bottom:18px;text-align:left}
+.story-word{display:inline;padding:2px 3px;border-radius:6px;cursor:pointer;transition:background 0.15s}
+.story-word:hover{background:#FFF3CD}
+.story-word.active{background:#FFD93D;color:#333;font-weight:700}
+.audio-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin-bottom:12px}
+.audio-btn{background:#FFD93D;border:none;color:#333;padding:12px 22px;font-size:1.05em;font-family:'Fredoka',sans-serif;font-weight:700;border-radius:50px;cursor:pointer;box-shadow:0 4px 0 #C9A800}
+.audio-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #C9A800}
+.audio-btn.stop{background:#FF6B6B;color:white;box-shadow:0 4px 0 #C44545}
+.speed-select{padding:10px 14px;border-radius:50px;border:3px solid #FFD93D;background:white;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer;font-size:0.95em}
+.vocab-subtabs{display:flex;gap:6px;margin-bottom:16px;justify-content:center;flex-wrap:wrap}
+.vocab-subtab{padding:8px 14px;border:none;background:#FFF3E0;border-radius:50px;font-family:'Fredoka',sans-serif;font-size:0.85em;font-weight:600;cursor:pointer;color:#666;box-shadow:0 2px 0 rgba(0,0,0,0.08)}
+.vocab-subtab.active{background:#FFD93D;color:#333;box-shadow:0 2px 0 #C9A800}
+.vocab-subpanel{display:none}
+.vocab-subpanel.active{display:block}
+.picture-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.pic-card{background:white;border:4px solid #FFE5B4;border-radius:20px;padding:16px;text-align:center;cursor:pointer;transition:transform 0.2s,border-color 0.2s;box-shadow:0 4px 0 rgba(0,0,0,0.06)}
+.pic-card:hover{transform:translateY(-4px);border-color:#FFD93D}
+.pic-card.playing{border-color:#E65100;transform:scale(1.04)}
+.pic-illustration{width:100%;height:130px;background:#FFFCF5;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;border:2px dashed #FFE5B4}
+.pic-illustration svg{width:95px;height:95px}
+.pic-illustration svg [stroke="#888"]{stroke:#5D4037;stroke-width:2}
+.pic-word{font-size:1.4em;font-weight:700;color:#E65100;margin-bottom:6px;font-family:'Bubblegum Sans',cursive}
+.pic-meaning{font-size:0.95em;color:#555;margin-bottom:8px;font-style:italic}
+.pic-example{font-size:0.9em;color:#777;background:#FAFAFA;padding:8px 10px;border-radius:10px;border-left:3px solid #FFD93D;text-align:left;line-height:1.4}
+.pq-display{width:220px;height:180px;background:#FFFCF5;border-radius:20px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px dashed #FFE5B4}
+.pq-display svg{width:140px;height:140px}
+.pq-display svg [stroke="#888"]{stroke:#5D4037;stroke-width:2}
+.pq-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin:0 auto}
+.pq-option{padding:14px;background:white;border:4px solid #eee;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.1em;font-weight:700;cursor:pointer;transition:all 0.15s;color:#333}
+.pq-option:hover{border-color:#FFD93D;transform:translateY(-2px)}
+.pq-option.correct{background:#4ECB71;color:white;border-color:#4ECB71}
+.pq-option.wrong{background:#FF6B6B;color:white;border-color:#FF6B6B}
+.wq-target{text-align:center;margin-bottom:16px}
+.wq-word{font-family:'Bubblegum Sans',cursive;font-size:2.5em;color:#E65100;margin-bottom:4px}
+.wq-meaning{color:#777;font-style:italic;margin-bottom:18px}
+.wq-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:460px;margin:0 auto}
+.wq-option{background:#FFFCF5;border:4px solid #eee;border-radius:18px;padding:12px;cursor:pointer;transition:all 0.15s;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.wq-option:hover{border-color:#FFD93D;transform:translateY(-2px)}
+.wq-option.correct{border-color:#4ECB71;background:#E8F5E9}
+.wq-option.wrong{border-color:#FF6B6B;background:#FFEBEE}
+.wq-option svg{width:80px;height:80px}
+.wq-option svg [stroke="#888"]{stroke:#5D4037;stroke-width:2}
+.memory-board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:500px;margin:0 auto}
+.mem-card{aspect-ratio:1;background:linear-gradient(135deg,#E65100,#FF9800);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:1.8em;font-weight:700;transition:transform 0.3s;position:relative;box-shadow:0 3px 0 rgba(0,0,0,0.15);overflow:hidden;padding:4px}
+.mem-card:hover{transform:scale(1.04)}
+.mem-card.flipped{background:#FFFCF5;border:3px solid #FFD93D;color:#E65100;font-size:0.85em;text-align:center;line-height:1.1}
+.mem-card.flipped svg{width:55px;height:55px}
+.mem-card.flipped svg [stroke="#888"]{stroke:#5D4037;stroke-width:2}
+.mem-card.flipped .mem-word{font-family:'Bubblegum Sans',cursive;font-size:1em;padding:2px}
+.mem-card.matched{background:#4ECB71;color:white;border:3px solid #4ECB71;pointer-events:none}
+.mem-card.matched svg [stroke="#5D4037"]{stroke:white}
+.mem-stats{text-align:center;margin-bottom:16px;font-size:1.1em;font-weight:600;color:#E65100}
+.mem-restart-btn{display:block;margin:16px auto 0;background:#FFD93D;border:none;padding:10px 20px;border-radius:50px;font-family:'Fredoka',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 3px 0 #C9A800}
+.sf-question{background:#FFFCF5;border:3px solid #FFE5B4;border-radius:18px;padding:18px;margin-bottom:14px}
+.sf-text{font-family:'DM Serif Display',serif;font-size:1.15em;color:#333;margin-bottom:14px;line-height:1.7;text-align:center}
+.sf-blank{display:inline-block;min-width:100px;padding:4px 14px;border-bottom:3px solid #E65100;font-weight:700;color:#E65100;margin:0 4px}
+.sf-options{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.sf-opt{padding:10px 22px;background:white;border:3px solid #eee;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1em;font-weight:700;cursor:pointer;color:#333}
+.sf-opt:hover{border-color:#FFD93D}
+.sf-opt.correct{background:#4ECB71;color:white;border-color:#4ECB71}
+.sf-opt.wrong{background:#FF6B6B;color:white;border-color:#FF6B6B}
+.listen-area{text-align:center}
+.play-passage-btn{background:#FFD93D;border:none;color:#333;padding:16px 30px;font-size:1.2em;font-family:'Fredoka',sans-serif;font-weight:700;border-radius:50px;cursor:pointer;box-shadow:0 5px 0 #C9A800;margin-bottom:18px}
+.play-passage-btn:active{transform:translateY(2px);box-shadow:0 3px 0 #C9A800}
+.question-counter{font-size:1em;font-weight:700;color:#E65100;margin-bottom:10px}
+.question-box{background:#FFFCF5;border:3px solid #FFE5B4;border-radius:18px;padding:18px;margin-top:12px}
+.question-text{font-size:1.15em;font-weight:700;color:#333;margin-bottom:14px;text-align:center}
+.answer-options{display:grid;grid-template-columns:1fr;gap:10px;max-width:500px;margin:0 auto}
+.answer-option{padding:13px;background:white;border:4px solid #eee;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.05em;font-weight:600;cursor:pointer;transition:all 0.15s;color:#333;text-align:left}
+.answer-option:hover{border-color:#FFD93D;transform:translateY(-2px)}
+.answer-option.correct{background:#4ECB71;color:white;border-color:#4ECB71}
+.answer-option.wrong{background:#FF6B6B;color:white;border-color:#FF6B6B}
+.feedback{text-align:center;margin-top:14px;font-size:1.2em;font-weight:700;min-height:30px}
+.feedback.success{color:#4ECB71}
+.feedback.error{color:#FF6B6B}
+.quiz-text{font-size:1.15em;color:#333;font-weight:600;margin-bottom:18px;background:#FFFCF5;padding:16px;border-radius:14px;border:3px solid #FFE5B4}
+.quiz-options{display:grid;grid-template-columns:1fr;gap:10px;max-width:500px;margin:0 auto}
+.quiz-option{padding:13px;background:white;border:4px solid #eee;border-radius:14px;font-family:'Fredoka',sans-serif;font-size:1.05em;font-weight:700;cursor:pointer;transition:all 0.15s;color:#333;text-align:left}
+.quiz-option:hover{border-color:#FFD93D;transform:translateY(-2px)}
+.quiz-option.correct{background:#4ECB71;color:white;border-color:#4ECB71}
+.quiz-option.wrong{background:#FF6B6B;color:white;border-color:#FF6B6B}
+.score-board{text-align:center;font-size:1.15em;font-weight:700;color:#E65100;margin-bottom:12px}
+.results-screen{text-align:center;padding:20px}
+.results-stars{font-size:4em;margin:15px 0;letter-spacing:8px}
+.results-title{font-family:'Bubblegum Sans',cursive;font-size:2em;color:#E65100;margin-bottom:10px}
+.results-msg{font-size:1.2em;color:#555;margin-bottom:20px}
+.next-btn{display:inline-block;background:#4ECB71;color:white;border:none;padding:12px 28px;font-size:1.1em;font-family:'Fredoka',sans-serif;font-weight:700;border-radius:50px;cursor:pointer;box-shadow:0 4px 0 #2E9E50;margin:6px}
+.next-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #2E9E50}
+.celebrate{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:4.5em;pointer-events:none;animation:celebrate 1s ease-out forwards;z-index:999}
+@keyframes celebrate{0%{opacity:0;transform:translate(-50%,-50%) scale(0.3)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.4)}100%{opacity:0;transform:translate(-50%,-150%) scale(1)}}
+.reset-link{text-align:center;margin-top:25px;font-size:0.85em;color:#999}
+.reset-link a{color:#999;cursor:pointer;text-decoration:underline}
+@media (max-width:600px){h1{font-size:1.8em}.tab{padding:8px 10px;font-size:0.8em}.story-text{font-size:1.1em}.picture-cards-grid{grid-template-columns:1fr}.memory-board{grid-template-columns:repeat(3,1fr)}.story-banner .banner-svg{width:60px;height:60px}}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="home">
+<header>
+<h1>English Hero 6</h1>
+<div class="subtitle">Words Come Alive!</div>
+<div class="level-badge" id="levelBadge">Word Explorer</div>
+<div class="total-stars" id="totalStars">0 stars earned</div>
+</header>
+<div class="unit-grid" id="unitGrid"></div>
+<div class="reset-link"><a id="resetBtn">Reset all progress</a></div>
+</div>
+<div id="lesson" style="display:none;">
+<div class="lesson-header">
+<button class="back-btn" id="backBtn">&#8592; Home</button>
+<div class="lesson-title" id="lessonTitle"></div>
+</div>
+<div class="tabs">
+<button class="tab active" data-panel="read">Read</button>
+<button class="tab" data-panel="vocab">Vocab</button>
+<button class="tab" data-panel="listen">Listen</button>
+<button class="tab" data-panel="quiz">Quiz</button>
+</div>
+<div class="panel active" id="read">
+<div class="card">
+<div class="story-banner" id="storyBanner"></div>
+<div class="audio-controls">
+<button class="audio-btn" id="playStory">&#9654; Read to Me</button>
+<button class="audio-btn stop" id="stopStory">&#9209; Stop</button>
+<select class="speed-select" id="speedSelect"><option value="0.7">Slow</option><option value="0.85" selected>Normal</option><option value="1.0">Fast</option></select>
+</div>
+<div class="story-text" id="storyText"></div>
+</div>
+</div>
+<div class="panel" id="vocab">
+<div class="card">
+<h2>Word Power!</h2>
+<div class="vocab-subtabs">
+<button class="vocab-subtab active" data-sub="cards">1. Picture Cards</button>
+<button class="vocab-subtab" data-sub="picquiz">2. Pic to Word</button>
+<button class="vocab-subtab" data-sub="wordquiz">3. Word to Pic</button>
+<button class="vocab-subtab" data-sub="memory">4. Memory Game</button>
+<button class="vocab-subtab" data-sub="sentence">5. Sentence Fill</button>
+</div>
+<div class="vocab-subpanel active" id="sub-cards"><p class="instruction">Tap each card to hear the word.</p><div class="picture-cards-grid" id="picCardsGrid"></div></div>
+<div class="vocab-subpanel" id="sub-picquiz"><p class="instruction">Look at the picture. Choose the right word.</p><div id="picQuizContainer"></div></div>
+<div class="vocab-subpanel" id="sub-wordquiz"><p class="instruction">Look at the word. Choose the right picture.</p><div id="wordQuizContainer"></div></div>
+<div class="vocab-subpanel" id="sub-memory"><p class="instruction">Find the matching pairs of word and picture!</p><div class="mem-stats" id="memStats">Moves: 0 | Pairs: 0/6</div><div class="memory-board" id="memBoard"></div><button class="mem-restart-btn" id="memRestart">Shuffle Again</button></div>
+<div class="vocab-subpanel" id="sub-sentence"><p class="instruction">Pick the right word for each sentence.</p><div id="sfContainer"></div><div class="feedback" id="sfFeedback"></div></div>
+</div>
+</div>
+<div class="panel" id="listen">
+<div class="card">
+<h2>Listen and Answer!</h2>
+<p class="instruction">Listen carefully, then answer all questions.</p>
+<div class="listen-area">
+<button class="play-passage-btn" id="playListenAgain">&#9654; Play Story</button>
+<div class="question-counter" id="listenCounter"></div>
+<div class="question-box" id="listenQuestionBox"></div>
+<div class="feedback" id="listenFeedback"></div>
+</div>
+</div>
+</div>
+<div class="panel" id="quiz">
+<div class="card">
+<h2>Story Quiz!</h2>
+<div class="score-board" id="scoreBoard">Question 1 of 5</div>
+<div class="quiz-question" id="quizQuestion"></div>
+</div>
+</div>
+</div>
+</div>
+<script>
+const SVG = {
+  "brave": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 20h60v30c0 25-30 40-30 40s-30-15-30-40z\"/></svg>",
+  "deep": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 20q15 10 40 0t40 0M50 20v60M35 70c0 15 30 15 30 0M40 80h20\"/></svg>",
+  "pearl": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 60c0-30 60-30 60 0c0 20-60 20-60 0z\"/>\n  <circle cx=\"50\" cy=\"55\" r=\"5\"/></svg>",
+  "treasure": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"40\" width=\"60\" height=\"40\"/>\n  <path d=\"M20 40c0-20 60-20 60 0M45 40v10h10v-10\"/></svg>",
+  "discover": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"40\" r=\"20\"/>\n  <line x1=\"55\" y1=\"55\" x2=\"80\" y2=\"80\"/>\n  <path d=\"M40 25l3 10h10l-8 5 3 10-8-7-8 7 3-10-8-5h10z\"/></svg>",
+  "amazing": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 10q0 30-30 30q30 0 30 30q0-30 30-30q-30 0-30-30zM20 70q0 10-10 10q10 0 10 10q0-10 10-10q-10 0-10-10z\"/></svg>",
+  "growing": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 80h60M50 80v-40c0 0-20 0-20 20c0 0 20 0 20-20c0 0 20-20 20 0c0 20-20 20-20 0\"/></svg>",
+  "blooming": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"10\"/>\n  <path d=\"M50 40c-20-20 20-20 0 0M60 50c20-20 20 20 0 0M50 60c20 20-20 20 0 0M40 50c-20 20-20-20 0 0\"/></svg>",
+  "fresh": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 80c-20-30 10-60 20-60c10 0 40 30 20 60zM50 20v60M65 40a5 5 0 1 0 0 10a5 5 0 1 0 0-10z\"/></svg>",
+  "peaceful": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 80l60-60M30 70c-10-20 10-30 20-20M40 60c10-20 30-30 20-10M50 50c-10-20 10-30 20-20M60 40c10-20 30-30 20-10\"/></svg>",
+  "calm": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 60q20-20 40 0t40 0M10 80q20-20 40 0t40 0M30 60a20 20 0 0 1 40 0\"/></svg>",
+  "helpful": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 60h30c10 0 20 10 30 0c10-10 20-10 20 0l-20 20h-30zM40 60v20\"/></svg>",
+  "generous": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 70h30c10 0 20 10 30 0c10-10 20-10 20 0l-20 20h-30z\"/>\n  <path d=\"M50 40c0-20-30-20-30 0c0 20 30 30 30 30c0 0 30-10 30-30c0-20-30-20-30 0z\"/></svg>",
+  "grateful": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 90v-50l-10-20l-10 10l10 20v40zM50 90v-50l10-20l10 10l-10 20v40z\"/></svg>",
+  "worried": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"35\" cy=\"40\" r=\"4\"/>\n  <circle cx=\"65\" cy=\"40\" r=\"4\"/>\n  <path d=\"M30 70q10-10 20 0t20 0\"/>\n  <path d=\"M75 20c10 0 10 20 0 20c-10 0 0-20 0-20z\"/></svg>",
+  "returned": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 40l20-20M20 40l20 20M20 40h40c20 0 20 40 0 40h-40\"/></svg>",
+  "understood": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M35 35c0-20 30-20 30 0c0 15-10 25-10 35h-10c0-10-10-20-10-35zM45 70v10h10v-10M47 80v5h6v-5M50 35v20M40 40l5 10M60 40l-5 10\"/></svg>",
+  "journey": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 90q20-30 30-40t10-40M80 90q-20-30-30-40t-10-40M10 50l30-40l30 40l20-20l10 20\"/></svg>",
+  "ancient": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"30\" y=\"20\" width=\"40\" height=\"10\"/>\n  <rect x=\"40\" y=\"30\" width=\"20\" height=\"40\"/>\n  <rect x=\"30\" y=\"70\" width=\"40\" height=\"10\"/>\n  <line x1=\"45\" y1=\"30\" x2=\"45\" y2=\"70\"/>\n  <line x1=\"55\" y1=\"30\" x2=\"55\" y2=\"70\"/>\n  <path d=\"M40 40l20 10M40 60l10 5\"/></svg>",
+  "blessed": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 80l20-20h10M80 80l-20-20h-10M20 10l20 30M50 10v35M80 10l-20 30\"/></svg>",
+  "fascinating": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 50q40-40 80 0q-40 40-80 0z\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"15\"/>\n  <path d=\"M50 40l2 7h8l-7 5l2 8l-5-5l-5 5l2-8l-7-5h8z\"/></svg>",
+  "gathered": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"40\" r=\"15\"/>\n  <circle cx=\"60\" cy=\"40\" r=\"15\"/>\n  <circle cx=\"50\" cy=\"60\" r=\"15\"/>\n  <path d=\"M30 50q20 30 40 0\"/></svg>",
+  "curious": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40 30c0-20 20-20 20 0c0 20-10 20-10 30M50 75a2 2 0 1 0 0 5a2 2 0 1 0 0-5z\"/></svg>",
+  "explore": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"30\"/>\n  <path d=\"M50 20l10 30l-10 30l-10-30zM50 20v60M40 50h20\"/></svg>",
+  "wisdom": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 80l40 10l40-10v-50l-40 10l-40-10zM50 90v-50\"/>\n  <circle cx=\"35\" cy=\"60\" r=\"8\"/>\n  <circle cx=\"65\" cy=\"60\" r=\"8\"/>\n  <circle cx=\"35\" cy=\"60\" r=\"2\"/>\n  <circle cx=\"65\" cy=\"60\" r=\"2\"/>\n  <path d=\"M45 60l5 5l5-5z\"/></svg>",
+  "training": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"10\" y=\"30\" width=\"10\" height=\"40\"/>\n  <rect x=\"80\" y=\"30\" width=\"10\" height=\"40\"/>\n  <line x1=\"20\" y1=\"50\" x2=\"80\" y2=\"50\"/>\n  <rect x=\"20\" y=\"35\" width=\"10\" height=\"30\"/>\n  <rect x=\"70\" y=\"35\" width=\"10\" height=\"30\"/></svg>",
+  "exhausted": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"30\" width=\"50\" height=\"40\" rx=\"5\"/>\n  <rect x=\"70\" y=\"40\" width=\"10\" height=\"20\"/>\n  <line x1=\"30\" y1=\"70\" x2=\"60\" y2=\"30\"/></svg>",
+  "determined": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"20\"/>\n  <line x1=\"10\" y1=\"90\" x2=\"50\" y2=\"50\"/>\n  <path d=\"M40 50h10v10z\"/></svg>",
+  "victory": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 30h40l-10 40h-20zM40 70v10h20M30 80h40v10h-40zM30 30c-20 0-20 30 0 20M70 30c20 0 20 30 0 20\"/></svg>",
+  "honest": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"50\" y1=\"10\" x2=\"50\" y2=\"90\"/>\n  <line x1=\"30\" y1=\"90\" x2=\"70\" y2=\"90\"/>\n  <line x1=\"20\" y1=\"30\" x2=\"80\" y2=\"30\"/>\n  <path d=\"M20 30l-10 30h20zM80 30l-10 30h20z\"/></svg>",
+  "mistake": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"20\" x2=\"80\" y2=\"80\"/>\n  <line x1=\"80\" y1=\"20\" x2=\"20\" y2=\"80\"/></svg>",
+  "respected": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 10l10 30h30l-25 20l10 30l-25-20l-25 20l10-30l-25-20h30z\"/></svg>",
+  "surprised": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <line x1=\"30\" y1=\"35\" x2=\"40\" y2=\"30\"/>\n  <line x1=\"70\" y1=\"35\" x2=\"60\" y2=\"30\"/>\n  <circle cx=\"35\" cy=\"45\" r=\"4\"/>\n  <circle cx=\"65\" cy=\"45\" r=\"4\"/>\n  <circle cx=\"50\" cy=\"70\" r=\"10\"/></svg>",
+  "searched": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 30h60l-10 50h-60z\"/>\n  <line x1=\"40\" y1=\"30\" x2=\"35\" y2=\"80\"/>\n  <line x1=\"60\" y1=\"30\" x2=\"55\" y2=\"80\"/>\n  <circle cx=\"60\" cy=\"50\" r=\"15\"/>\n  <line x1=\"70\" y1=\"60\" x2=\"90\" y2=\"80\"/></svg>",
+  "relieved": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <path d=\"M30 40c5-5 15-5 20 0M70 40c-5-5-15-5-20 0\"/>\n  <path d=\"M40 70q10 10 20 0\"/>\n  <path d=\"M70 65c10 0 20 10 10 20\"/></svg>",
+  "patience": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 20h40l-20 30l20 30h-40l20-30zM30 15h40M30 85h40\"/></svg>",
+  "taught": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"10\" y=\"20\" width=\"80\" height=\"50\"/>\n  <line x1=\"20\" y1=\"70\" x2=\"20\" y2=\"90\"/>\n  <line x1=\"80\" y1=\"70\" x2=\"80\" y2=\"90\"/>\n  <line x1=\"30\" y1=\"80\" x2=\"60\" y2=\"40\"/></svg>",
+  "forgive": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 50h30l10-10l10 10h30M40 50l10 10l10-10M40 60l10 10l10-10M50 40v30\"/></svg>",
+  "icon_pearl_diver": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 70q20-20 40 0t40 0\"/>\n  <rect x=\"30\" y=\"30\" width=\"40\" height=\"20\" rx=\"5\"/>\n  <path d=\"M70 40h10v-30\"/>\n  <circle cx=\"40\" cy=\"40\" r=\"5\"/>\n  <circle cx=\"60\" cy=\"40\" r=\"5\"/></svg>",
+  "icon_my_garden": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 50h40l-10 40h-20z\"/>\n  <path d=\"M50 50v-30M50 30q-20 0-10-10M50 40q20 0 10-10\"/></svg>",
+  "icon_kind_stranger": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 50h30l10-10l10 10h30M40 50l10 10l10-10M40 60l10 10l10-10M50 40v30\"/></svg>",
+  "icon_madinah_trip": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 80h60v-30h-60zM40 50c0-30 20-30 20 0M80 80h10v-60h-10l5-10l-5 0\"/>\n  <circle cx=\"50\" cy=\"25\" r=\"3\"/></svg>",
+  "icon_curious_boy": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"60\" r=\"20\"/>\n  <path d=\"M25 50c5-10 25-10 30 0M35 55v5M45 55v5M35 70q5 5 10-5M70 40c0-20 20-20 20 0c0 10-10 10-10 20M80 70a2 2 0 1 0 0 5a2 2 0 1 0 0-5z\"/></svg>",
+  "icon_first_race": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"30\" cy=\"30\" r=\"10\"/>\n  <path d=\"M30 40v30M30 50l20-10M30 50l-10 10M30 70l-10 20M30 70l20 10\"/>\n  <line x1=\"70\" y1=\"10\" x2=\"70\" y2=\"90\"/>\n  <line x1=\"80\" y1=\"10\" x2=\"80\" y2=\"90\"/>\n  <path d=\"M70 30l10 10M70 50l10 10M70 70l10 10\"/></svg>",
+  "icon_storyteller": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"30\" cy=\"50\" r=\"15\"/>\n  <path d=\"M15 50c0 30 30 30 30 0z\"/>\n  <path d=\"M55 30c0-20 40-20 40 0c0 20-20 20-20 30l-10 10v-20c-10-5-10-15-10-20z\"/></svg>",
+  "icon_honest_shop": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 40h80l-10-30h-60zM20 40v50h60v-50M30 40v50M70 40v50M40 60h20v20h-20z\"/></svg>",
+  "icon_lost_found": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"50\" width=\"40\" height=\"30\"/>\n  <path d=\"M20 50l10-10h40l-10 10\"/>\n  <line x1=\"60\" y1=\"50\" x2=\"70\" y2=\"40\"/>\n  <line x1=\"60\" y1=\"80\" x2=\"70\" y2=\"70\"/>\n  <line x1=\"70\" y1=\"40\" x2=\"70\" y2=\"70\"/>\n  <circle cx=\"70\" cy=\"40\" r=\"15\"/>\n  <line x1=\"80\" y1=\"50\" x2=\"95\" y2=\"65\"/></svg>",
+  "icon_father_lesson": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"30\" r=\"10\"/>\n  <path d=\"M40 40v40M30 50h20M30 90l10-10l10 10\"/>\n  <circle cx=\"70\" cy=\"50\" r=\"7\"/>\n  <path d=\"M70 57v23M60 65h20M65 90l5-10l5 10\"/></svg>",
+  "b_sea": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 50q15-20 40 0t40 0M10 70q15-20 40 0t40 0\"/></svg>",
+  "b_fish": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 50c0-30 50-30 60 0c-10 30-60 30-60 0zM80 50l20-20v40zM35 45a2 2 0 1 0 0 5a2 2 0 1 0 0-5z\"/></svg>",
+  "b_star": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 10l10 30h30l-25 20l10 30l-25-20l-25 20l10-30l-25-20h30z\"/></svg>",
+  "b_strong": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 70h20l10-30q10-20 30-10q10 20-10 30l-20 10v20h-30z\"/></svg>",
+  "b_palm_tree": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40 90q10-40 20 0M50 50q-30-20-40 0M50 50q-30-40-10-40M50 50q30-40 10-40M50 50q30-20 40 0M50 50v-40\"/></svg>",
+  "b_flower": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"10\"/>\n  <path d=\"M50 40c-20-20 20-20 0 0M60 50c20-20 20 20 0 0M50 60c20 20-20 20 0 0M40 50c-20 20-20-20 0 0\"/></svg>",
+  "b_plant": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 80h40M50 80v-40M50 60q-20 0-10-20M50 50q20 0 10-20\"/></svg>",
+  "b_sun": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"20\"/>\n  <line x1=\"50\" y1=\"10\" x2=\"50\" y2=\"20\"/>\n  <line x1=\"50\" y1=\"80\" x2=\"50\" y2=\"90\"/>\n  <line x1=\"10\" y1=\"50\" x2=\"20\" y2=\"50\"/>\n  <line x1=\"80\" y1=\"50\" x2=\"90\" y2=\"50\"/>\n  <line x1=\"20\" y1=\"20\" x2=\"30\" y2=\"30\"/>\n  <line x1=\"70\" y1=\"70\" x2=\"80\" y2=\"80\"/>\n  <line x1=\"20\" y1=\"80\" x2=\"30\" y2=\"70\"/>\n  <line x1=\"70\" y1=\"30\" x2=\"80\" y2=\"20\"/></svg>",
+  "b_heart": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 30c0-20-30-20-30 0c0 20 30 50 30 50c0 0 30-30 30-50c0-20-30-20-30 0z\"/></svg>",
+  "b_smile": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"35\" cy=\"40\" r=\"5\"/>\n  <circle cx=\"65\" cy=\"40\" r=\"5\"/>\n  <path d=\"M30 60q20 20 40 0\"/></svg>",
+  "b_boy": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"30\"/>\n  <path d=\"M30 30c10-15 30-15 40 0M40 45v5M60 45v5M45 65q5 5 10-5\"/></svg>",
+  "b_mosque": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 80h60v-30h-60zM40 50c0-30 20-30 20 0M80 80h10v-60h-10l5-10l-5 0\"/>\n  <circle cx=\"50\" cy=\"25\" r=\"3\"/></svg>",
+  "b_books": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"70\" width=\"60\" height=\"10\"/>\n  <rect x=\"25\" y=\"60\" width=\"50\" height=\"10\"/>\n  <rect x=\"30\" y=\"50\" width=\"40\" height=\"10\"/>\n  <path d=\"M30 50l5-30h30l5 30\"/></svg>",
+  "b_question": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M30 30c0-20 40-20 40 0c0 20-20 20-20 30M50 75a2 2 0 1 0 0 5a2 2 0 1 0 0-5z\"/></svg>",
+  "b_magnifier": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"40\" r=\"20\"/>\n  <line x1=\"55\" y1=\"55\" x2=\"80\" y2=\"80\"/></svg>",
+  "b_notebook": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"20\" width=\"60\" height=\"60\"/>\n  <line x1=\"30\" y1=\"20\" x2=\"30\" y2=\"80\"/>\n  <circle cx=\"25\" cy=\"30\" r=\"2\"/>\n  <circle cx=\"25\" cy=\"50\" r=\"2\"/>\n  <circle cx=\"25\" cy=\"70\" r=\"2\"/>\n  <line x1=\"40\" y1=\"40\" x2=\"70\" y2=\"40\"/>\n  <line x1=\"40\" y1=\"60\" x2=\"70\" y2=\"60\"/></svg>",
+  "b_bee": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"50\" rx=\"20\" ry=\"15\"/>\n  <path d=\"M30 50h-10M70 50h10l5-5M50 35c-10-20 10-20 0 0M50 35c10-20 30-20 0 0M40 35v30M60 35v30\"/></svg>",
+  "b_bird": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 60c10-20 30-10 30-10c0 0 20-10 30 10M50 50c-10-20-30-20-40-10M50 50c10-20 30-20 40-10\"/></svg>",
+  "b_medal": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"60\" r=\"15\"/>\n  <path d=\"M40 48l-10-38l20 20l20-20l-10 38\"/>\n  <circle cx=\"50\" cy=\"60\" r=\"8\"/></svg>",
+  "b_running": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"20\" r=\"10\"/>\n  <path d=\"M50 30v30M50 40l-20 10M50 40l20-10M50 60l-20 20M50 60l20 30\"/></svg>",
+  "b_old_man": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"40\" r=\"20\"/>\n  <path d=\"M30 40c0 40 40 40 40 0z\"/>\n  <line x1=\"40\" y1=\"35\" x2=\"45\" y2=\"35\"/>\n  <line x1=\"55\" y1=\"35\" x2=\"60\" y2=\"35\"/></svg>",
+  "b_lantern": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"35\" y=\"30\" width=\"30\" height=\"40\"/>\n  <path d=\"M30 30h40l-10-20h-20zM30 70h40l10 20h-60zM50 10a10 10 0 1 0 0-10M45 30v40M55 30v40\"/></svg>",
+  "b_money": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"70\" rx=\"30\" ry=\"10\"/>\n  <ellipse cx=\"50\" cy=\"60\" rx=\"30\" ry=\"10\"/>\n  <ellipse cx=\"50\" cy=\"50\" rx=\"30\" ry=\"10\"/>\n  <ellipse cx=\"50\" cy=\"40\" rx=\"30\" ry=\"10\"/>\n  <line x1=\"20\" y1=\"40\" x2=\"20\" y2=\"70\"/>\n  <line x1=\"80\" y1=\"40\" x2=\"80\" y2=\"70\"/></svg>",
+  "b_handshake": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M10 50h30l10-10l10 10h30M40 50l10 10l10-10M40 60l10 10l10-10M50 40v30\"/></svg>",
+  "b_sad": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"35\" cy=\"40\" r=\"5\"/>\n  <circle cx=\"65\" cy=\"40\" r=\"5\"/>\n  <path d=\"M30 70q20-20 40 0\"/></svg>",
+  "b_clock": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"50\" cy=\"50\" r=\"40\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"3\"/>\n  <line x1=\"50\" y1=\"50\" x2=\"50\" y2=\"25\"/>\n  <line x1=\"50\" y1=\"50\" x2=\"70\" y2=\"50\"/></svg>",
+  "b_father_son": "<svg viewBox=\"0 0 100 100\" stroke=\"#888\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"35\" cy=\"30\" r=\"12\"/>\n  <path d=\"M35 42v48M15 60l20-10l20 10M20 90l15-20l15 20\"/>\n  <circle cx=\"70\" cy=\"50\" r=\"8\"/>\n  <path d=\"M70 58v32M55 75l15-10l15 10M60 90l10-10l10 10\"/></svg>"
+};
+const UNITS = [
+  {
+    "id": "pearl_diver",
+    "name": "The Pearl Diver",
+    "icon": "&#127754;",
+    "banner": "&#127754; &#128031; &#11088; &#128170;",
+    "story": "Long ago, a young man named Saeed lived by the sea. He was a pearl diver. Every morning, he took his small boat far from land. He held his breath and dove deep into the blue water. He looked for special shells called oysters. One day, Saeed found a giant oyster. He brought it to his boat and opened it slowly. Inside was the biggest pearl he had ever seen! It was white and round. Saeed was very happy. He took it home and gave it to his old mother. \"This is for you,\" he said. His mother cried with joy. Saeed was a brave diver, but he was also a good son.",
+    "vocab": [
+      {
+        "word": "brave",
+        "meaning": "not afraid",
+        "svg": "brave",
+        "example": "Saeed was a brave diver who went deep into the sea."
+      },
+      {
+        "word": "deep",
+        "meaning": "far down",
+        "svg": "deep",
+        "example": "He dove deep into the blue water."
+      },
+      {
+        "word": "pearl",
+        "meaning": "a shiny round stone from the sea",
+        "svg": "pearl",
+        "example": "The pearl was white and round."
+      },
+      {
+        "word": "treasure",
+        "meaning": "something very special and rare",
+        "svg": "treasure",
+        "example": "The pearl was a great treasure."
+      },
+      {
+        "word": "discover",
+        "meaning": "to find for the first time",
+        "svg": "discover",
+        "example": "He discovered a giant oyster on the sea floor."
+      },
+      {
+        "word": "amazing",
+        "meaning": "very wonderful",
+        "svg": "amazing",
+        "example": "It was the most amazing pearl he had ever seen!"
+      }
+    ],
+    "sf": [
+      {
+        "text": "Saeed was a ___ diver who was not afraid of the deep sea.",
+        "target": "brave"
+      },
+      {
+        "text": "He dove very ___ into the blue water.",
+        "target": "deep"
+      },
+      {
+        "text": "Inside the oyster was a beautiful white ___.",
+        "target": "pearl"
+      },
+      {
+        "text": "The big pearl was a ___ for his family.",
+        "target": "treasure"
+      },
+      {
+        "text": "He felt his heart beat fast when he ___ed the giant oyster.",
+        "target": "discover"
+      },
+      {
+        "text": "The pearl was so big and beautiful, it was truly ___!",
+        "target": "amazing"
+      }
+    ],
+    "listen": [
+      {
+        "q": "What was Saeed's job?",
+        "options": [
+          "Fisherman",
+          "Pearl diver",
+          "Sailor",
+          "Cook"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did he find inside the giant oyster?",
+        "options": [
+          "A small pearl",
+          "The biggest pearl ever",
+          "A fish",
+          "Nothing"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Who did Saeed give the pearl to?",
+        "options": [
+          "His father",
+          "His friend",
+          "His mother",
+          "The king"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where did Saeed live?",
+        "options": [
+          "In the desert",
+          "By the sea",
+          "In the mountains",
+          "In the city"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What are oysters?",
+        "options": [
+          "Fish",
+          "Special shells",
+          "Plants",
+          "Stones"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How did Saeed's mother react?",
+        "options": [
+          "She was angry",
+          "She was sad",
+          "She cried with joy",
+          "She did not care"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What does the story tell us about Saeed?",
+        "options": [
+          "He was lazy",
+          "He was brave and a good son",
+          "He was greedy",
+          "He was scared"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Why was the pearl special?",
+        "options": [
+          "It was small",
+          "It was the biggest he had seen",
+          "It was black",
+          "It was broken"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_pearl_diver",
+    "bannerSvgs": [
+      "b_sea",
+      "b_fish",
+      "b_star",
+      "b_strong"
+    ]
+  },
+  {
+    "id": "my_garden",
+    "name": "My Garden",
+    "icon": "&#127807;",
+    "banner": "&#127794; &#127801; &#127799; &#127774;",
+    "story": "I have a small garden behind my house. My grandfather helped me make it last spring. Every morning, I water my plants. I have flowers, herbs, and even small tomato plants! My favorite flower is the white jasmine. It has a fresh, sweet smell. The tomatoes are growing slowly. They will be red soon. My garden is a peaceful place. When I feel sad or angry, I sit in the garden. I listen to the birds and look at the blooming flowers. The garden makes me feel calm. Yesterday, my mother used my fresh herbs in her cooking! \"Your garden is amazing,\" she said. I felt very proud.",
+    "vocab": [
+      {
+        "word": "growing",
+        "meaning": "getting bigger",
+        "svg": "growing",
+        "example": "The tomatoes are growing slowly."
+      },
+      {
+        "word": "blooming",
+        "meaning": "opening into a flower",
+        "svg": "blooming",
+        "example": "I look at the blooming flowers."
+      },
+      {
+        "word": "fresh",
+        "meaning": "new and clean",
+        "svg": "fresh",
+        "example": "The jasmine has a fresh, sweet smell."
+      },
+      {
+        "word": "peaceful",
+        "meaning": "quiet and calm",
+        "svg": "peaceful",
+        "example": "My garden is a peaceful place."
+      },
+      {
+        "word": "calm",
+        "meaning": "not angry or worried",
+        "svg": "calm",
+        "example": "The garden makes me feel calm."
+      },
+      {
+        "word": "amazing",
+        "meaning": "very wonderful",
+        "svg": "amazing",
+        "example": "Your garden is amazing!"
+      }
+    ],
+    "sf": [
+      {
+        "text": "My tomato plants are ___ very fast this week.",
+        "target": "growing"
+      },
+      {
+        "text": "In spring, all the flowers are ___ and beautiful.",
+        "target": "blooming"
+      },
+      {
+        "text": "I love the smell of ___ herbs from my garden.",
+        "target": "fresh"
+      },
+      {
+        "text": "The garden in the evening is so quiet and ___.",
+        "target": "peaceful"
+      },
+      {
+        "text": "When I feel angry, sitting in the garden helps me feel ___.",
+        "target": "calm"
+      },
+      {
+        "text": "My mother said my garden is ___ and she is very proud.",
+        "target": "amazing"
+      }
+    ],
+    "listen": [
+      {
+        "q": "Who helped make the garden?",
+        "options": [
+          "Father",
+          "Mother",
+          "Grandfather",
+          "Brother"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is the boy's favorite flower?",
+        "options": [
+          "Rose",
+          "White jasmine",
+          "Tulip",
+          "Daisy"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How does the garden make him feel?",
+        "options": [
+          "Tired",
+          "Angry",
+          "Calm",
+          "Hungry"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "When did they make the garden?",
+        "options": [
+          "Last winter",
+          "Last spring",
+          "Last summer",
+          "Last week"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What does the boy do every morning?",
+        "options": [
+          "Picks flowers",
+          "Waters plants",
+          "Cuts grass",
+          "Plants new seeds"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is growing besides flowers?",
+        "options": [
+          "Trees",
+          "Tomatoes and herbs",
+          "Grass",
+          "Fruit"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the mother do with the herbs?",
+        "options": [
+          "Threw them away",
+          "Used them in cooking",
+          "Sold them",
+          "Gave to neighbors"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How does the boy feel about the garden?",
+        "options": [
+          "Bored",
+          "Tired",
+          "Proud and calm",
+          "Confused"
+        ],
+        "correct": 2
+      }
+    ],
+    "iconSvg": "icon_my_garden",
+    "bannerSvgs": [
+      "b_palm_tree",
+      "b_flower",
+      "b_plant",
+      "b_sun"
+    ]
+  },
+  {
+    "id": "kind_stranger",
+    "name": "The Kind Stranger",
+    "icon": "&#129309;",
+    "banner": "&#129309; &#10084; &#128512; &#129489;",
+    "story": "It was a hot day. My grandmother and I were walking home from the market. The bags were very heavy. Suddenly, my grandmother stopped. She held her chest. \"I need to sit down,\" she said. I was very worried. A young man saw us. He was a stranger, but his eyes were kind. He ran to a shop and brought a chair. He gave my grandmother cold water. He was so generous. He carried our bags to our house. At our house, my mother thanked him. She wanted to give him money, but he refused. \"I only did what is right,\" he said. He returned to his car and waved goodbye. We were very grateful. My grandmother said, \"Allah sends good people when we need them most.\"",
+    "vocab": [
+      {
+        "word": "helpful",
+        "meaning": "doing things to help others",
+        "svg": "helpful",
+        "example": "The stranger was very helpful with our bags."
+      },
+      {
+        "word": "generous",
+        "meaning": "happy to give things to others",
+        "svg": "generous",
+        "example": "He was so generous with his time."
+      },
+      {
+        "word": "grateful",
+        "meaning": "thankful",
+        "svg": "grateful",
+        "example": "We were very grateful for his help."
+      },
+      {
+        "word": "worried",
+        "meaning": "feeling scared something bad will happen",
+        "svg": "worried",
+        "example": "I was very worried about my grandmother."
+      },
+      {
+        "word": "returned",
+        "meaning": "went back",
+        "svg": "returned",
+        "example": "He returned to his car and waved goodbye."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "I understood that good people are everywhere."
+      }
+    ],
+    "sf": [
+      {
+        "text": "The young man was very ___ to my grandmother.",
+        "target": "helpful"
+      },
+      {
+        "text": "He gave us water and was very ___ with his time.",
+        "target": "generous"
+      },
+      {
+        "text": "We were ___ for everything he did for us.",
+        "target": "grateful"
+      },
+      {
+        "text": "When grandmother stopped, I was very ___ about her.",
+        "target": "worried"
+      },
+      {
+        "text": "After helping us, he ___ to his car.",
+        "target": "returned"
+      },
+      {
+        "text": "After this, I ___ that kindness comes from strangers too.",
+        "target": "understood"
+      }
+    ],
+    "listen": [
+      {
+        "q": "Why did the grandmother stop?",
+        "options": [
+          "She was tired",
+          "She held her chest",
+          "She forgot something",
+          "She saw a friend"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the young man bring first?",
+        "options": [
+          "Money",
+          "Food",
+          "A chair",
+          "A doctor"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Did the stranger take money?",
+        "options": [
+          "Yes, a lot",
+          "Yes, a little",
+          "No, he refused",
+          "He took her phone"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where were they coming from?",
+        "options": [
+          "School",
+          "The market",
+          "A hospital",
+          "A wedding"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the stranger give the grandmother?",
+        "options": [
+          "Hot tea",
+          "Cold water",
+          "Bread",
+          "Medicine"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the stranger do at the end?",
+        "options": [
+          "Stayed for tea",
+          "Returned to his car",
+          "Asked for money",
+          "Got lost"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the grandmother say at the end?",
+        "options": [
+          "He wants money",
+          "Allah sends good people",
+          "I am tired",
+          "Let us go home"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the lesson of the story?",
+        "options": [
+          "Strangers are dangerous",
+          "Good people exist everywhere",
+          "Markets are bad",
+          "Don't walk far"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_kind_stranger",
+    "bannerSvgs": [
+      "b_handshake",
+      "b_heart",
+      "b_smile",
+      "b_boy"
+    ]
+  },
+  {
+    "id": "madinah_trip",
+    "name": "A Trip to Madinah",
+    "icon": "&#128332;",
+    "banner": "&#128332; &#128218; &#10084; &#129488;",
+    "story": "Last month, my family went on a special trip to Madinah. It was a long journey by car. We started early in the morning. After many hours, we arrived in Madinah. The city is ancient and full of history. We visited the Prophet's Mosque. It was the most peaceful place I had ever seen. Many people from different countries gathered to pray together. I felt blessed to be there. We prayed and read Quran. My father told me about the Prophet's life. I was fascinated by every story. We stayed for three days. We ate dates and drank Zamzam water. On the last day, I felt sad to leave. But I made a promise: I will visit again when I am older.",
+    "vocab": [
+      {
+        "word": "journey",
+        "meaning": "a long trip",
+        "svg": "journey",
+        "example": "It was a long journey by car."
+      },
+      {
+        "word": "ancient",
+        "meaning": "very very old",
+        "svg": "ancient",
+        "example": "The city is ancient and full of history."
+      },
+      {
+        "word": "peaceful",
+        "meaning": "quiet and calm",
+        "svg": "peaceful",
+        "example": "It was the most peaceful place."
+      },
+      {
+        "word": "blessed",
+        "meaning": "lucky to have something special",
+        "svg": "blessed",
+        "example": "I felt blessed to be there."
+      },
+      {
+        "word": "fascinating",
+        "meaning": "very interesting",
+        "svg": "fascinating",
+        "example": "I was fascinated by every story."
+      },
+      {
+        "word": "gathered",
+        "meaning": "came together in a group",
+        "svg": "gathered",
+        "example": "Many people gathered to pray."
+      }
+    ],
+    "sf": [
+      {
+        "text": "The trip from Riyadh to Madinah was a long ___.",
+        "target": "journey"
+      },
+      {
+        "text": "Madinah is an ___ city with thousands of years of history.",
+        "target": "ancient"
+      },
+      {
+        "text": "The mosque was so quiet and ___.",
+        "target": "peaceful"
+      },
+      {
+        "text": "I felt very ___ to be in such a holy place.",
+        "target": "blessed"
+      },
+      {
+        "text": "My father's stories were ___ and full of wisdom.",
+        "target": "fascinating"
+      },
+      {
+        "text": "Many people ___ at the mosque from all over the world.",
+        "target": "gathered"
+      }
+    ],
+    "listen": [
+      {
+        "q": "When did they start the trip?",
+        "options": [
+          "At noon",
+          "Early in the morning",
+          "In the evening",
+          "At night"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How did they travel?",
+        "options": [
+          "By plane",
+          "By train",
+          "By car",
+          "By bus"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "How long did they stay?",
+        "options": [
+          "One day",
+          "Two days",
+          "Three days",
+          "A week"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where did they go?",
+        "options": [
+          "Mecca",
+          "Madinah",
+          "Jeddah",
+          "Riyadh"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did they visit?",
+        "options": [
+          "A museum",
+          "The Prophet's Mosque",
+          "A market",
+          "A school"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Who told stories about the Prophet?",
+        "options": [
+          "Mother",
+          "Father",
+          "Imam",
+          "Tour guide"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did they drink?",
+        "options": [
+          "Coffee",
+          "Tea",
+          "Zamzam water",
+          "Juice"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What promise did the boy make?",
+        "options": [
+          "To stay forever",
+          "To visit again",
+          "To never return",
+          "To bring his friends"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_madinah_trip",
+    "bannerSvgs": [
+      "b_mosque",
+      "b_books",
+      "b_heart",
+      "b_question"
+    ]
+  },
+  {
+    "id": "curious_boy",
+    "name": "The Curious Boy",
+    "icon": "&#129488;",
+    "banner": "&#129488; &#128269; &#128221; &#127793;",
+    "story": "Yousef was a very curious boy. He always wanted to know how things worked. He asked his parents hundreds of questions every day. So Yousef started to discover answers himself. He explored the garden every weekend. He watched the ants for hours. Amazing! He climbed trees to see birds in their nests. He read every book in his school library. One day, he found an old encyclopedia in his grandfather's house. He learned about stars, animals, plants, and oceans. The book was fascinating. His teacher noticed his deep love for learning. \"You will be a great scientist one day,\" she said. Yousef smiled. When he grows up, he wants to discover something new and important for the world.",
+    "vocab": [
+      {
+        "word": "curious",
+        "meaning": "wanting to know about things",
+        "svg": "curious",
+        "example": "Yousef was a very curious boy."
+      },
+      {
+        "word": "explore",
+        "meaning": "to look around a new place",
+        "svg": "explore",
+        "example": "He explored the garden every weekend."
+      },
+      {
+        "word": "amazing",
+        "meaning": "very wonderful",
+        "svg": "amazing",
+        "example": "The ants carried huge food. Amazing!"
+      },
+      {
+        "word": "discover",
+        "meaning": "to find for the first time",
+        "svg": "discover",
+        "example": "He started to discover answers himself."
+      },
+      {
+        "word": "fascinating",
+        "meaning": "very interesting",
+        "svg": "fascinating",
+        "example": "The encyclopedia was fascinating."
+      },
+      {
+        "word": "wisdom",
+        "meaning": "knowing many things from learning",
+        "svg": "wisdom",
+        "example": "Books give us wisdom about the world."
+      }
+    ],
+    "sf": [
+      {
+        "text": "A child who asks many questions is a ___ child.",
+        "target": "curious"
+      },
+      {
+        "text": "Yousef loves to ___ new places and learn from them.",
+        "target": "explore"
+      },
+      {
+        "text": "The size of the universe is so big it is ___.",
+        "target": "amazing"
+      },
+      {
+        "text": "Scientists try to ___ new things every day.",
+        "target": "discover"
+      },
+      {
+        "text": "The story of stars is ___ and full of mystery.",
+        "target": "fascinating"
+      },
+      {
+        "text": "Reading many books gives us ___ about the world.",
+        "target": "wisdom"
+      }
+    ],
+    "listen": [
+      {
+        "q": "How many questions did Yousef ask?",
+        "options": [
+          "Ten",
+          "Hundreds",
+          "A few",
+          "One"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Where did he find the encyclopedia?",
+        "options": [
+          "School library",
+          "Bookshop",
+          "Grandfather's house",
+          "Online"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What did the teacher say he would be?",
+        "options": [
+          "A doctor",
+          "A teacher",
+          "A great scientist",
+          "A pilot"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "What did Yousef watch for hours?",
+        "options": [
+          "Cars",
+          "Ants",
+          "TV",
+          "Birds singing"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Why did he climb trees?",
+        "options": [
+          "For fun",
+          "To see birds in nests",
+          "To pick fruit",
+          "To hide"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did he learn about?",
+        "options": [
+          "Only stars",
+          "Only animals",
+          "Stars, animals, plants, oceans",
+          "Only history"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "How is Yousef different?",
+        "options": [
+          "He is taller",
+          "He is very curious",
+          "He plays sports",
+          "He sleeps a lot"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What does Yousef want when he grows up?",
+        "options": [
+          "To be famous",
+          "To make money",
+          "To discover something important",
+          "To travel"
+        ],
+        "correct": 2
+      }
+    ],
+    "iconSvg": "icon_curious_boy",
+    "bannerSvgs": [
+      "b_question",
+      "b_magnifier",
+      "b_notebook",
+      "b_plant"
+    ]
+  },
+  {
+    "id": "first_race",
+    "name": "My First Race",
+    "icon": "&#127939;",
+    "banner": "&#127939; &#129351; &#128170; &#11088;",
+    "story": "Last week was my school sports day. I was in the 100-meter race. I had been training for two months. Every evening, I ran around the park with my father. I was determined to win. The morning of the race, I felt scared. There were eight boys in my race. When the race started, I ran as fast as I could. I was exhausted, but I kept going. I could see two boys ahead of me. With ten meters to go, I passed one boy. Then, just before the finish line, I passed the second boy! I won! Everyone cheered. My father ran to me with tears in his eyes. \"You are a champion,\" he said. I held my gold medal high. It was the greatest victory of my life.",
+    "vocab": [
+      {
+        "word": "training",
+        "meaning": "practicing to get better",
+        "svg": "training",
+        "example": "I had been training for two months."
+      },
+      {
+        "word": "determined",
+        "meaning": "sure I will not give up",
+        "svg": "determined",
+        "example": "I was determined to win."
+      },
+      {
+        "word": "exhausted",
+        "meaning": "very very tired",
+        "svg": "exhausted",
+        "example": "I was exhausted but I kept going."
+      },
+      {
+        "word": "victory",
+        "meaning": "winning",
+        "svg": "victory",
+        "example": "It was the greatest victory of my life."
+      },
+      {
+        "word": "amazing",
+        "meaning": "very wonderful",
+        "svg": "amazing",
+        "example": "It was an amazing day."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "I understood that hard work pays off."
+      }
+    ],
+    "sf": [
+      {
+        "text": "A champion needs months of hard ___ before a race.",
+        "target": "training"
+      },
+      {
+        "text": "I was ___ to win, even when others doubted me.",
+        "target": "determined"
+      },
+      {
+        "text": "After running so fast, I was completely ___.",
+        "target": "exhausted"
+      },
+      {
+        "text": "Holding the gold medal was a sweet ___.",
+        "target": "victory"
+      },
+      {
+        "text": "The cheering of the crowd was ___ to hear.",
+        "target": "amazing"
+      },
+      {
+        "text": "After the race, I ___ that my father was always right.",
+        "target": "understood"
+      }
+    ],
+    "listen": [
+      {
+        "q": "How long did the boy train?",
+        "options": [
+          "One week",
+          "One month",
+          "Two months",
+          "A year"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "How many boys were in the race?",
+        "options": [
+          "Six",
+          "Seven",
+          "Eight",
+          "Ten"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Did the boy win?",
+        "options": [
+          "No, he came last",
+          "He came second",
+          "Yes, he won",
+          "He did not finish"
+        ],
+        "correct": 2
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where did the boy train every evening?",
+        "options": [
+          "School",
+          "The park",
+          "The gym",
+          "His garden"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How did he feel before the race?",
+        "options": [
+          "Confident",
+          "Bored",
+          "Scared",
+          "Sleepy"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "When did he pass the second boy?",
+        "options": [
+          "At the start",
+          "At the middle",
+          "Just before the finish",
+          "After the finish"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What did his father do when he won?",
+        "options": [
+          "Was angry",
+          "Cried with joy",
+          "Went home",
+          "Laughed"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What lesson did he learn?",
+        "options": [
+          "Racing is easy",
+          "Hard training makes a difference",
+          "Don't race",
+          "Always win"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_first_race",
+    "bannerSvgs": [
+      "b_running",
+      "b_medal",
+      "b_strong",
+      "b_star"
+    ]
+  },
+  {
+    "id": "storyteller",
+    "name": "The Old Storyteller",
+    "icon": "&#128116;",
+    "banner": "&#128116; &#128218; &#11088; &#127812;",
+    "story": "Every Friday evening, my whole family gathered at my grandfather's house. He is eighty years old. He has white hair and eyes full of wisdom. After dinner, he sat on his big chair. We sat around him on the carpet. He started telling us ancient stories from the old days. People knew the stars in the sky like a map. They were honest and helped each other always. His stories were fascinating. He told us about brave Bedouins who crossed the desert. We were silent and listened with wide eyes. After every story, my grandfather gave us a lesson. \"Remember, my children,\" he said, \"Money comes and goes, but good values stay forever.\" I understood his message deeply.",
+    "vocab": [
+      {
+        "word": "gathered",
+        "meaning": "came together in a group",
+        "svg": "gathered",
+        "example": "My whole family gathered at his house."
+      },
+      {
+        "word": "wisdom",
+        "meaning": "knowing many things from life",
+        "svg": "wisdom",
+        "example": "His eyes were full of wisdom."
+      },
+      {
+        "word": "fascinating",
+        "meaning": "very interesting",
+        "svg": "fascinating",
+        "example": "His stories were fascinating."
+      },
+      {
+        "word": "ancient",
+        "meaning": "very very old",
+        "svg": "ancient",
+        "example": "He told ancient stories."
+      },
+      {
+        "word": "honest",
+        "meaning": "always tells the truth",
+        "svg": "honest",
+        "example": "People were honest in the old days."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "We understood his lessons."
+      }
+    ],
+    "sf": [
+      {
+        "text": "Every Friday, all the family ___ in one place.",
+        "target": "gathered"
+      },
+      {
+        "text": "My grandfather has great ___ from his long life.",
+        "target": "wisdom"
+      },
+      {
+        "text": "His old stories about brave Bedouins were ___.",
+        "target": "fascinating"
+      },
+      {
+        "text": "Some of his stories were from ___ times, hundreds of years ago.",
+        "target": "ancient"
+      },
+      {
+        "text": "A truly ___ person never tells lies.",
+        "target": "honest"
+      },
+      {
+        "text": "After his lessons, we ___ what is really important in life.",
+        "target": "understood"
+      }
+    ],
+    "listen": [
+      {
+        "q": "How old is the grandfather?",
+        "options": [
+          "Sixty",
+          "Seventy",
+          "Eighty",
+          "Ninety"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "When did the family gather?",
+        "options": [
+          "Every day",
+          "Every Friday evening",
+          "Every month",
+          "Once a year"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did people use as a map?",
+        "options": [
+          "Books",
+          "The stars",
+          "The sun",
+          "Trees"
+        ],
+        "correct": 1
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where did the family sit?",
+        "options": [
+          "On chairs",
+          "On the carpet",
+          "On the bed",
+          "In the garden"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What kind of stories did he tell?",
+        "options": [
+          "Funny modern stories",
+          "Ancient stories",
+          "New stories",
+          "Movie stories"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How were people in the old days?",
+        "options": [
+          "Selfish",
+          "Honest and helpful",
+          "Lazy",
+          "Quiet"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the grandfather's lesson?",
+        "options": [
+          "Money is everything",
+          "Values stay forever",
+          "Travel a lot",
+          "Tell stories"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Who did the stories make the family feel?",
+        "options": [
+          "Bored",
+          "Tired",
+          "Silent and amazed",
+          "Confused"
+        ],
+        "correct": 2
+      }
+    ],
+    "iconSvg": "icon_storyteller",
+    "bannerSvgs": [
+      "b_old_man",
+      "b_books",
+      "b_star",
+      "b_lantern"
+    ]
+  },
+  {
+    "id": "honest_shop",
+    "name": "The Honest Shopkeeper",
+    "icon": "&#128722;",
+    "banner": "&#128722; &#128181; &#129309; &#10084;",
+    "story": "In our neighborhood, there is a small shop owned by Abu Khalid. He is a very honest shopkeeper. One Saturday, my mother sent me to buy bread, milk, and eggs. I gave Abu Khalid a 100-riyal note. He gave me my change. When I got home, I counted the money. He gave me 20 riyals more than my correct change! It was a mistake. The 20 riyals could buy me a new toy. But I knew it was not mine. I told my mother right away. I ran back to the shop. I gave Abu Khalid the extra 20 riyals. He was very surprised. He looked at me with respect. \"You are a very honest boy.\" I felt very proud. I understood that being honest is more valuable than money.",
+    "vocab": [
+      {
+        "word": "honest",
+        "meaning": "always tells the truth",
+        "svg": "honest",
+        "example": "Abu Khalid is an honest shopkeeper."
+      },
+      {
+        "word": "mistake",
+        "meaning": "something done wrong",
+        "svg": "mistake",
+        "example": "It was a mistake by Abu Khalid."
+      },
+      {
+        "word": "returned",
+        "meaning": "gave back",
+        "svg": "returned",
+        "example": "I returned the extra money."
+      },
+      {
+        "word": "respected",
+        "meaning": "thought highly of someone",
+        "svg": "respected",
+        "example": "He looked at me with respect."
+      },
+      {
+        "word": "surprised",
+        "meaning": "did not expect",
+        "svg": "surprised",
+        "example": "He was very surprised by my action."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "I understood the value of honesty."
+      }
+    ],
+    "sf": [
+      {
+        "text": "Abu Khalid is loved because he is ___ with everyone.",
+        "target": "honest"
+      },
+      {
+        "text": "Giving extra change was a small ___, but a real one.",
+        "target": "mistake"
+      },
+      {
+        "text": "I felt happy when I ___ the extra money.",
+        "target": "returned"
+      },
+      {
+        "text": "After my action, the shopkeeper ___ me very much.",
+        "target": "respected"
+      },
+      {
+        "text": "He was ___ that I came back with the money.",
+        "target": "surprised"
+      },
+      {
+        "text": "That day I ___ that honesty is more valuable than money.",
+        "target": "understood"
+      }
+    ],
+    "listen": [
+      {
+        "q": "What is the shopkeeper's name?",
+        "options": [
+          "Abu Salem",
+          "Abu Khalid",
+          "Abu Yousef",
+          "Abu Ahmed"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How much extra change?",
+        "options": [
+          "10 riyals",
+          "20 riyals",
+          "50 riyals",
+          "100 riyals"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the shopkeeper say?",
+        "options": [
+          "Thank you",
+          "You are honest",
+          "Go away",
+          "Come again"
+        ],
+        "correct": 1
+      }
+    ],
+    "quiz": [
+      {
+        "q": "What did the boy buy?",
+        "options": [
+          "Only bread",
+          "Bread, milk, and eggs",
+          "Eggs only",
+          "Cheese"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "When did he notice the extra money?",
+        "options": [
+          "At the shop",
+          "On the way home",
+          "At home",
+          "Next day"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What could the extra money buy?",
+        "options": [
+          "A book",
+          "A new toy",
+          "Food",
+          "A bike"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the boy do?",
+        "options": [
+          "Kept the money",
+          "Returned the money",
+          "Lost it",
+          "Spent it"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the lesson?",
+        "options": [
+          "Always check change",
+          "Honesty is more valuable than money",
+          "Shop elsewhere",
+          "Mothers know best"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_honest_shop",
+    "bannerSvgs": [
+      "b_money",
+      "b_handshake",
+      "b_smile",
+      "b_heart"
+    ]
+  },
+  {
+    "id": "lost_found",
+    "name": "The Lost and Found",
+    "icon": "&#128269;",
+    "banner": "&#128269; &#128542; &#128512; &#10084;",
+    "story": "Last weekend, my family and I went to the big mall. It was very crowded. I held my mother's hand. Suddenly, I let go to look at a toy store. When I turned around, my family was gone. I was lost. My heart started beating very fast. I was very worried. I tried not to cry. A kind woman in the toy store helped me. She took me to the customer service desk. They made an announcement. After ten long minutes, my parents arrived. They had searched everywhere for me. My mother had tears in her eyes. They were so relieved to find me. We thanked the workers. I was grateful for the kind woman. From that day, I always hold my mother's hand. I understood that her rules keep me safe.",
+    "vocab": [
+      {
+        "word": "worried",
+        "meaning": "feeling scared something bad will happen",
+        "svg": "worried",
+        "example": "I was worried about my family."
+      },
+      {
+        "word": "searched",
+        "meaning": "looked for something carefully",
+        "svg": "searched",
+        "example": "They searched everywhere for me."
+      },
+      {
+        "word": "relieved",
+        "meaning": "happy after worry stops",
+        "svg": "relieved",
+        "example": "They were so relieved to find me."
+      },
+      {
+        "word": "grateful",
+        "meaning": "thankful",
+        "svg": "grateful",
+        "example": "I was grateful to the kind woman."
+      },
+      {
+        "word": "returned",
+        "meaning": "came back",
+        "svg": "returned",
+        "example": "My family returned for me."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "I understood the importance of staying close."
+      }
+    ],
+    "sf": [
+      {
+        "text": "When I lost my family, I was very ___.",
+        "target": "worried"
+      },
+      {
+        "text": "My parents ___ for me everywhere in the mall.",
+        "target": "searched"
+      },
+      {
+        "text": "When my mother saw me again, she was so ___.",
+        "target": "relieved"
+      },
+      {
+        "text": "I was very ___ to the kind woman who helped me.",
+        "target": "grateful"
+      },
+      {
+        "text": "My family ___ to the desk after ten long minutes.",
+        "target": "returned"
+      },
+      {
+        "text": "After that day, I ___ why my mother's rules are important.",
+        "target": "understood"
+      }
+    ],
+    "listen": [
+      {
+        "q": "Where did the family go?",
+        "options": [
+          "School",
+          "A park",
+          "The big mall",
+          "Restaurant"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Who helped him first?",
+        "options": [
+          "A guard",
+          "A kind woman",
+          "A child",
+          "A boy"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How long did he wait?",
+        "options": [
+          "Five minutes",
+          "Ten minutes",
+          "Half an hour",
+          "One hour"
+        ],
+        "correct": 1
+      }
+    ],
+    "quiz": [
+      {
+        "q": "How was the mall?",
+        "options": [
+          "Empty",
+          "Quiet",
+          "Crowded",
+          "Closed"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Why did the boy let go of his mother's hand?",
+        "options": [
+          "Tired",
+          "To look at a toy store",
+          "To meet a friend",
+          "Wanted ice cream"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Where was he taken?",
+        "options": [
+          "Outside",
+          "Customer service",
+          "Toy store",
+          "Back home"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How did the mother feel?",
+        "options": [
+          "Angry",
+          "Relieved with tears",
+          "Calm",
+          "Confused"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did he learn?",
+        "options": [
+          "Malls are scary",
+          "Hold mother's hand",
+          "Don't go to malls",
+          "Toys are bad"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_lost_found",
+    "bannerSvgs": [
+      "b_magnifier",
+      "b_sad",
+      "b_smile",
+      "b_heart"
+    ]
+  },
+  {
+    "id": "father_lesson",
+    "name": "My Father's Lesson",
+    "icon": "&#128104;",
+    "banner": "&#128104; &#128102; &#9201; &#10084;",
+    "story": "My father is the wisest man I know. Last Friday, I came home from school very angry. A boy in my class had broken my favorite pencil case. I wanted to fight him. My father saw me. He smiled gently and took me to the garden. We sat under the lemon tree. \"Look at this candle,\" he said. He lit a small candle. The flame was strong. A small breeze made the flame shake. \"Anger is like the wind. It tries to put out your light.\" I was silent. I started to feel calm. He continued, \"Be patient with people. If you fight, you both become smaller. If you forgive, you both become bigger.\" My father taught me a lesson I will never forget. I understood that patience is stronger than anger.",
+    "vocab": [
+      {
+        "word": "patience",
+        "meaning": "waiting calmly without getting angry",
+        "svg": "patience",
+        "example": "Patience is stronger than anger."
+      },
+      {
+        "word": "calm",
+        "meaning": "not angry or worried",
+        "svg": "calm",
+        "example": "I started to feel calm."
+      },
+      {
+        "word": "taught",
+        "meaning": "gave a lesson",
+        "svg": "taught",
+        "example": "My father taught me a lesson."
+      },
+      {
+        "word": "understood",
+        "meaning": "knew the meaning",
+        "svg": "understood",
+        "example": "I understood his message."
+      },
+      {
+        "word": "wisdom",
+        "meaning": "knowing many things from life",
+        "svg": "wisdom",
+        "example": "My father is full of wisdom."
+      },
+      {
+        "word": "forgive",
+        "meaning": "stop being angry at someone",
+        "svg": "forgive",
+        "example": "When you forgive, you become bigger."
+      }
+    ],
+    "sf": [
+      {
+        "text": "A wise person has ___ when others are angry.",
+        "target": "patience"
+      },
+      {
+        "text": "After my father's words, my heart became ___.",
+        "target": "calm"
+      },
+      {
+        "text": "My father ___ me how to control my anger.",
+        "target": "taught"
+      },
+      {
+        "text": "In the garden, I ___ what my father was telling me.",
+        "target": "understood"
+      },
+      {
+        "text": "My father has great ___ from many years of life.",
+        "target": "wisdom"
+      },
+      {
+        "text": "When you ___ someone, you both become better.",
+        "target": "forgive"
+      }
+    ],
+    "listen": [
+      {
+        "q": "Why was the boy angry?",
+        "options": [
+          "Failed a test",
+          "A boy broke his pencil case",
+          "He lost his bag",
+          "His friend was sick"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the father light?",
+        "options": [
+          "A fire",
+          "A small candle",
+          "A lamp",
+          "Incense"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the father say anger is like?",
+        "options": [
+          "Fire",
+          "The wind",
+          "A river",
+          "A mountain"
+        ],
+        "correct": 1
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Where did they sit?",
+        "options": [
+          "Kitchen",
+          "Under the lemon tree",
+          "On the roof",
+          "Majlis"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What did the boy first want to do?",
+        "options": [
+          "Cry",
+          "Forgive",
+          "Fight the boy",
+          "Tell teacher"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What happens if you fight?",
+        "options": [
+          "You become bigger",
+          "You both become smaller",
+          "You win",
+          "Nothing"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What happens if you forgive?",
+        "options": [
+          "You lose",
+          "You both become bigger",
+          "Nothing changes",
+          "You become smaller"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the main lesson?",
+        "options": [
+          "Fight back",
+          "Patience is stronger than anger",
+          "Tell parents everything",
+          "Avoid school"
+        ],
+        "correct": 1
+      }
+    ],
+    "iconSvg": "icon_father_lesson",
+    "bannerSvgs": [
+      "b_father_son",
+      "b_boy",
+      "b_clock",
+      "b_heart"
+    ]
+  }
+];
+
+let progress=loadProgress(),currentUnit=null,storyWords=[],listenIndex=0,listenScore=0,picQuizIndex=0,wordQuizIndex=0,memCards=[],memFlipped=[],memMatched=0,memMoves=0,memLocked=false,quizIndex=0,quizScore=0;
+function loadProgress(){try{const d=localStorage.getItem('englishHero6Progress');if(d)return JSON.parse(d)}catch(e){}return{units:{},totalStars:0}}
+function saveProgress(){try{localStorage.setItem('englishHero6Progress',JSON.stringify(progress))}catch(e){}}
+function speak(text,rate,onWord,onEnd){if(!('speechSynthesis' in window))return;if(!rate)rate=0.85;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=rate;u.pitch=1.05;u.lang='en-US';const voices=window.speechSynthesis.getVoices();const pref=voices.find(v=>v.name.indexOf('Google')>=0&&v.lang.indexOf('en')===0)||voices.find(v=>v.lang.indexOf('en')===0);if(pref)u.voice=pref;if(onWord)u.onboundary=function(e){if(e.name==='word')onWord(e.charIndex)};if(onEnd)u.onend=onEnd;window.speechSynthesis.speak(u)}
+function stopSpeak(){if('speechSynthesis' in window)window.speechSynthesis.cancel();document.querySelectorAll('.story-word.active').forEach(w=>w.classList.remove('active'))}
+if('speechSynthesis' in window)window.speechSynthesis.onvoiceschanged=function(){};
+function buildHome(){const grid=document.getElementById('unitGrid');grid.innerHTML='';let totalStars=0;UNITS.forEach((unit,index)=>{const up=progress.units[unit.id]||{stars:0,completed:false};totalStars+=up.stars;const card=document.createElement('div');card.className='unit-card';let locked=false;if(index>0){const prev=progress.units[UNITS[index-1].id];if(!prev||prev.stars===0)locked=true}if(locked)card.classList.add('locked');if(up.completed)card.classList.add('completed');const sd='&#11088;'.repeat(up.stars)+'&#9734;'.repeat(3-up.stars);const iconSvg=SVG[unit.iconSvg]||'';card.innerHTML=`${locked?'<span class="lock-icon">&#128274;</span>':''}<div class="unit-icon">${iconSvg}</div><div class="unit-num">Story ${index+1}</div><div class="unit-name">${unit.name}</div><div class="unit-stars">${sd}</div>`;if(!locked)card.addEventListener('click',()=>openUnit(unit));grid.appendChild(card)});progress.totalStars=totalStars;document.getElementById('totalStars').innerHTML=totalStars+' stars earned';let level='Word Explorer';if(totalStars>=25)level='Word Master!';else if(totalStars>=18)level='Vocab Champion';else if(totalStars>=10)level='Word Hero';else if(totalStars>=4)level='Word Hunter';document.getElementById('levelBadge').textContent=level}
+function openUnit(unit){currentUnit=unit;stopSpeak();document.getElementById('home').style.display='none';document.getElementById('lesson').style.display='block';const titleIconSvg=SVG[unit.iconSvg]||'';document.getElementById('lessonTitle').innerHTML=`<span class="lesson-title-icon">${titleIconSvg}</span><span>${unit.name}</span>`;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector('.tab[data-panel="read"]').classList.add('active');document.getElementById('read').classList.add('active');document.querySelectorAll('.vocab-subtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.vocab-subpanel').forEach(p=>p.classList.remove('active'));document.querySelector('.vocab-subtab[data-sub="cards"]').classList.add('active');document.getElementById('sub-cards').classList.add('active');buildRead();buildPicCards();buildPicQuiz();buildWordQuiz();buildMemory();buildSentenceFill();startListen();startQuiz();window.scrollTo(0,0)}
+function buildRead(){const banner=document.getElementById('storyBanner');banner.innerHTML='';(currentUnit.bannerSvgs||[]).forEach(key=>{const div=document.createElement('div');div.className='banner-svg';div.innerHTML=SVG[key]||'';banner.appendChild(div)});const story=currentUnit.story;storyWords=[];const el=document.getElementById('storyText');el.innerHTML='';let pos=0;const tokens=story.split(/(\s+)/);tokens.forEach(tok=>{if(/^\s+$/.test(tok)){el.appendChild(document.createTextNode(tok));pos+=tok.length}else if(tok.length>0){const span=document.createElement('span');span.className='story-word';span.textContent=tok;span.dataset.start=pos;span.dataset.end=pos+tok.length;span.addEventListener('click',()=>{const cw=tok.replace(/[^a-zA-Z']/g,'');if(cw)speak(cw,0.8)});el.appendChild(span);storyWords.push(span);pos+=tok.length}})}
+function highlightWordAt(charIndex){document.querySelectorAll('.story-word.active').forEach(w=>w.classList.remove('active'));for(let i=0;i<storyWords.length;i++){const s=parseInt(storyWords[i].dataset.start),e=parseInt(storyWords[i].dataset.end);if(charIndex>=s&&charIndex<e){storyWords[i].classList.add('active');storyWords[i].scrollIntoView({behavior:'smooth',block:'center'});break}}}
+document.getElementById('playStory').addEventListener('click',()=>{const r=parseFloat(document.getElementById('speedSelect').value);speak(currentUnit.story,r,highlightWordAt,()=>document.querySelectorAll('.story-word.active').forEach(w=>w.classList.remove('active')))});
+document.getElementById('stopStory').addEventListener('click',stopSpeak);
+document.querySelectorAll('.vocab-subtab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.vocab-subtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.vocab-subpanel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('sub-'+tab.dataset.sub).classList.add('active')})});
+function buildPicCards(){const grid=document.getElementById('picCardsGrid');grid.innerHTML='';currentUnit.vocab.forEach(item=>{const card=document.createElement('div');card.className='pic-card';const svg=SVG[item.svg]||'';card.innerHTML=`<div class="pic-illustration">${svg}</div><div class="pic-word">${item.word}</div><div class="pic-meaning">${item.meaning}</div><div class="pic-example">${item.example}</div>`;card.addEventListener('click',()=>{document.querySelectorAll('.pic-card').forEach(x=>x.classList.remove('playing'));card.classList.add('playing');speak(item.word+'. '+item.example,0.8);setTimeout(()=>card.classList.remove('playing'),2500)});grid.appendChild(card)})}
+function buildPicQuiz(){picQuizIndex=0;showPicQuizQuestion()}
+function showPicQuizQuestion(){const items=currentUnit.vocab;const target=items[picQuizIndex%items.length];const wrong=items.filter(i=>i.word!==target.word).sort(()=>Math.random()-0.5).slice(0,3);const options=wrong.concat([target]).sort(()=>Math.random()-0.5);const svg=SVG[target.svg]||'';const c=document.getElementById('picQuizContainer');c.innerHTML=`<div class="pq-display">${svg}</div><div class="pq-options">${options.map(o=>`<button class="pq-option" data-word="${o.word}">${o.word}</button>`).join('')}</div><div class="feedback" id="pqFeedback"></div>`;document.querySelectorAll('.pq-option').forEach(btn=>{btn.addEventListener('click',()=>{if(btn.dataset.word===target.word){btn.classList.add('correct');showFeedback('pqFeedback','Correct!','success');celebrate('&#11088;');speak(target.word,0.85);setTimeout(()=>{picQuizIndex++;showPicQuizQuestion()},1400)}else{btn.classList.add('wrong');document.querySelectorAll('.pq-option').forEach(b=>{if(b.dataset.word===target.word)b.classList.add('correct')});showFeedback('pqFeedback',`It is "${target.word}"`,'error');speak(target.word,0.85);setTimeout(()=>{picQuizIndex++;showPicQuizQuestion()},1800)}document.querySelectorAll('.pq-option').forEach(b=>b.style.pointerEvents='none')})})}
+function buildWordQuiz(){wordQuizIndex=0;showWordQuizQuestion()}
+function showWordQuizQuestion(){const items=currentUnit.vocab;const target=items[wordQuizIndex%items.length];const wrong=items.filter(i=>i.word!==target.word).sort(()=>Math.random()-0.5).slice(0,3);const options=wrong.concat([target]).sort(()=>Math.random()-0.5);const c=document.getElementById('wordQuizContainer');c.innerHTML=`<div class="wq-target"><div class="wq-word">${target.word}</div><div class="wq-meaning">(${target.meaning})</div></div><div class="wq-options">${options.map(o=>`<button class="wq-option" data-word="${o.word}">${SVG[o.svg]||''}</button>`).join('')}</div><div class="feedback" id="wqFeedback"></div>`;speak(target.word,0.85);document.querySelectorAll('.wq-option').forEach(btn=>{btn.addEventListener('click',()=>{if(btn.dataset.word===target.word){btn.classList.add('correct');showFeedback('wqFeedback','Correct!','success');celebrate('&#11088;');setTimeout(()=>{wordQuizIndex++;showWordQuizQuestion()},1400)}else{btn.classList.add('wrong');document.querySelectorAll('.wq-option').forEach(b=>{if(b.dataset.word===target.word)b.classList.add('correct')});showFeedback('wqFeedback',`Look! That is "${target.word}"`,'error');setTimeout(()=>{wordQuizIndex++;showWordQuizQuestion()},1800)}document.querySelectorAll('.wq-option').forEach(b=>b.style.pointerEvents='none')})})}
+function buildMemory(){memMatched=0;memMoves=0;memFlipped=[];memLocked=false;const items=currentUnit.vocab;memCards=[];items.forEach((item,idx)=>{memCards.push({id:idx,type:'word',text:item.word,pairId:idx});memCards.push({id:idx,type:'pic',svg:item.svg,pairId:idx})});memCards.sort(()=>Math.random()-0.5);const board=document.getElementById('memBoard');board.innerHTML='';memCards.forEach((card,i)=>{const div=document.createElement('div');div.className='mem-card';div.dataset.idx=i;div.dataset.pairId=card.pairId;div.dataset.type=card.type;div.textContent='?';div.addEventListener('click',()=>flipMemCard(div,card));board.appendChild(div)});updateMemStats()}
+function flipMemCard(el,card){if(memLocked||el.classList.contains('flipped')||el.classList.contains('matched'))return;el.classList.add('flipped');el.textContent='';if(card.type==='word'){el.innerHTML=`<div class="mem-word">${card.text}</div>`;speak(card.text,0.85)}else el.innerHTML=SVG[card.svg]||'';memFlipped.push({el,card});if(memFlipped.length===2){memMoves++;updateMemStats();memLocked=true;const[a,b]=memFlipped;if(a.card.pairId===b.card.pairId&&a.card.type!==b.card.type){setTimeout(()=>{a.el.classList.add('matched');b.el.classList.add('matched');memMatched++;updateMemStats();memFlipped=[];memLocked=false;if(memMatched===currentUnit.vocab.length)celebrate('&#127942;')},600)}else{setTimeout(()=>{a.el.classList.remove('flipped');b.el.classList.remove('flipped');a.el.textContent='?';b.el.textContent='?';memFlipped=[];memLocked=false},1100)}}}
+function updateMemStats(){document.getElementById('memStats').textContent=`Moves: ${memMoves} | Pairs: ${memMatched}/${currentUnit.vocab.length}`}
+document.getElementById('memRestart').addEventListener('click',buildMemory);
+function buildSentenceFill(){const c=document.getElementById('sfContainer');c.innerHTML='';document.getElementById('sfFeedback').textContent='';let answered=0,correct=0;const total=currentUnit.sf.length;const allWords=currentUnit.vocab.map(v=>v.word);currentUnit.sf.forEach((item,idx)=>{const others=allWords.filter(w=>w!==item.target).sort(()=>Math.random()-0.5).slice(0,3);const options=others.concat([item.target]).sort(()=>Math.random()-0.5);const div=document.createElement('div');div.className='sf-question';const display=item.text.replace('___','<span class="sf-blank">?</span>');div.innerHTML=`<div class="sf-text">${idx+1}. ${display}</div><div class="sf-options">${options.map(o=>`<button class="sf-opt" data-word="${o}">${o}</button>`).join('')}</div>`;c.appendChild(div);div.querySelectorAll('.sf-opt').forEach(btn=>{btn.addEventListener('click',()=>{if(div.dataset.answered)return;div.dataset.answered='1';const blank=div.querySelector('.sf-blank');blank.textContent=btn.dataset.word;if(btn.dataset.word===item.target){btn.classList.add('correct');correct++;speak(item.text.replace('___',item.target),0.85)}else{btn.classList.add('wrong');div.querySelectorAll('.sf-opt').forEach(b=>{if(b.dataset.word===item.target)b.classList.add('correct')})}div.querySelectorAll('.sf-opt').forEach(b=>b.style.pointerEvents='none');answered++;if(answered===total){const msg=`You got ${correct} of ${total} right!`;showFeedback('sfFeedback',msg,correct===total?'success':'error');if(correct===total)celebrate('&#127942;')}})})})}
+function startListen(){listenIndex=0;listenScore=0;showListenQuestion()}
+function showListenQuestion(){const total=currentUnit.listen.length;if(listenIndex>=total){document.getElementById('listenQuestionBox').innerHTML=`<div style="text-align:center;padding:20px;"><div style="font-size:1.5em;color:#E65100;font-weight:700;margin-bottom:12px;">Listening Done!</div><div style="font-size:1.2em;margin-bottom:16px;">You got ${listenScore} of ${total} right!</div><button class="next-btn" id="listenAgainBtn">Try Again</button></div>`;document.getElementById('listenCounter').textContent='';document.getElementById('listenAgainBtn').addEventListener('click',startListen);return}document.getElementById('listenCounter').textContent=`Question ${listenIndex+1} of ${total}`;const q=currentUnit.listen[listenIndex];document.getElementById('listenFeedback').textContent='';document.getElementById('listenQuestionBox').innerHTML=`<div class="question-text">${q.q}</div><div class="answer-options">${q.options.map((o,i)=>`<button class="answer-option" data-idx="${i}">${o}</button>`).join('')}</div>`;document.querySelectorAll('#listenQuestionBox .answer-option').forEach(btn=>{btn.addEventListener('click',()=>{const idx=parseInt(btn.dataset.idx);if(idx===q.correct){btn.classList.add('correct');listenScore++;showFeedback('listenFeedback','Correct!','success');celebrate('&#11088;')}else{btn.classList.add('wrong');document.querySelectorAll('#listenQuestionBox .answer-option').forEach(b=>{if(parseInt(b.dataset.idx)===q.correct)b.classList.add('correct')});showFeedback('listenFeedback','See the correct answer.','error')}document.querySelectorAll('#listenQuestionBox .answer-option').forEach(b=>b.style.pointerEvents='none');const next=document.createElement('button');next.className='next-btn';next.textContent='Next';next.style.marginTop='15px';next.addEventListener('click',()=>{listenIndex++;showListenQuestion()});document.getElementById('listenQuestionBox').appendChild(next)})})}
+document.getElementById('playListenAgain').addEventListener('click',()=>speak(currentUnit.story,0.8));
+function showFeedback(id,text,type){const el=document.getElementById(id);el.textContent=text;el.className='feedback '+type}
+function celebrate(emoji){const el=document.createElement('div');el.className='celebrate';el.innerHTML=emoji;document.body.appendChild(el);setTimeout(()=>el.remove(),1000)}
+function startQuiz(){quizIndex=0;quizScore=0;showQuizQuestion()}
+function showQuizQuestion(){const total=currentUnit.quiz.length;if(quizIndex>=total){showQuizResults();return}document.getElementById('scoreBoard').textContent=`Question ${quizIndex+1} of ${total}`;const q=currentUnit.quiz[quizIndex];const optHtml=q.options.map((o,i)=>`<button class="quiz-option" data-idx="${i}">${o}</button>`).join('');document.getElementById('quizQuestion').innerHTML=`<div class="quiz-text">${q.q}</div><div class="quiz-options">${optHtml}</div>`;document.querySelectorAll('.quiz-option').forEach(btn=>{btn.addEventListener('click',()=>{const idx=parseInt(btn.dataset.idx);if(idx===q.correct){btn.classList.add('correct');quizScore++;speak('Correct!',0.9);celebrate('&#11088;')}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-option').forEach(b=>{if(parseInt(b.dataset.idx)===q.correct)b.classList.add('correct')})}document.querySelectorAll('.quiz-option').forEach(b=>b.style.pointerEvents='none');const next=document.createElement('button');next.className='next-btn';next.innerHTML=(quizIndex+1<total)?'Next':'See Results';next.style.marginTop='20px';next.addEventListener('click',()=>{quizIndex++;showQuizQuestion()});document.getElementById('quizQuestion').appendChild(next)})})}
+function showQuizResults(){const total=currentUnit.quiz.length;const pct=quizScore/total;let stars=0;if(pct>=0.9)stars=3;else if(pct>=0.6)stars=2;else if(pct>=0.3)stars=1;const ex=progress.units[currentUnit.id]||{stars:0,completed:false};if(stars>ex.stars)ex.stars=stars;if(stars>=1)ex.completed=true;progress.units[currentUnit.id]=ex;saveProgress();let msg='Keep practicing!';if(stars===3)msg='Amazing! You are a true word master!';else if(stars===2)msg='Great job! Try once more!';else if(stars===1)msg='Good try! Read the story again!';const sd='&#11088;'.repeat(stars)+'&#9734;'.repeat(3-stars);document.getElementById('quizQuestion').innerHTML=`<div class="results-screen"><div class="results-title">Done!</div><div class="results-stars">${sd}</div><div class="results-msg">${msg}</div><div style="font-size:1.2em;font-weight:600;color:#555;margin-bottom:18px;">Score: ${quizScore} / ${total}</div><button class="next-btn" id="tryAgainBtn">Try Again</button><button class="next-btn" id="goHomeBtn" style="background:#FF9F40;box-shadow:0 4px 0 #C97400;">Home</button></div>`;document.getElementById('scoreBoard').textContent='All done!';document.getElementById('tryAgainBtn').addEventListener('click',startQuiz);document.getElementById('goHomeBtn').addEventListener('click',goHome);if(stars===3)setTimeout(()=>celebrate('&#127942;'),300)}
+function goHome(){stopSpeak();document.getElementById('lesson').style.display='none';document.getElementById('home').style.display='block';buildHome();window.scrollTo(0,0)}
+document.getElementById('backBtn').addEventListener('click',goHome);
+document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{stopSpeak();document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.panel).classList.add('active')})});
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Reset all progress? This will erase all stars.')){progress={units:{},totalStars:0};saveProgress();buildHome()}});
+buildHome();
+</script>
+</body>
+</html>
